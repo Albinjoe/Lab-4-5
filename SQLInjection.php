@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -20,7 +20,7 @@
 //
 //    }
 
-@ $db = new mysqli('localhost', 'root', 'root', 'testinguser');
+@ $db = new mysqli('localhost', 'root', '', 'testinguser');
 
 if ($db->connect_error) {
     echo "could not connect: " . $db->connect_error;
@@ -41,36 +41,36 @@ if (isset($_POST['username'], $_POST['userpass'])) {
 
     $uname = htmlentities($uname);
     $upass = htmlentities($upass);
-    
+
     #without function, so here you can try to implement the SQL injection
     #various types to do it, either add ' -- to the end of a username, which will comment out
-    #or simply use 
+    #or simply use
     #' OR '1'='1' #
     #$uname = $_POST['username'];
-    
+
     #here we hash the password, and we want to have it hashed in the database as well
     #optimally when you create a user (through code) you simply send a hash
     #hasing can be done using different methods, MD5, SHA1 etc.
-    
+
     $upass = sha1($_POST['userpass']);
-    
+
     #just to see what we are selecting, and we can use it to test in phpmyadmin/heidisql
-    
+
     //echo "SELECT * FROM user WHERE username = '{$uname}' AND userpass = '{$upass}'";
-    
+
     $query = ("SELECT * FROM user WHERE username = '{$uname}' "."AND userpass = '{$upass}'");
-       
-    
+
+
     $stmt = $db->prepare($query);
     $stmt->execute();
-    $stmt->store_result(); 
-    
+    $stmt->store_result();
+
     #here we create a new variable 'totalcount' just to check if there's at least
     #one user with the right combination. If there is, we later on print out "access granted"
     $totalcount = $stmt->num_rows();
-    
-    
-    
+
+
+
 }
 ?>
 <!DOCTYPE html>
@@ -111,9 +111,3 @@ if (isset($_POST['username'], $_POST['userpass'])) {
 <?php
     include("footer.php")
 ?>
-
-
-
-
-
-  
